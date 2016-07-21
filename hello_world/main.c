@@ -21,7 +21,28 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	if (renderer == NULL)
+	{
+		printf("SQL_CreateRender Error: %s", SDL_GetError());
+		return 1;
+	}
+
+	SDL_Surface *bmp = SDL_LoadBMP("test.bmp");
+
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, bmp);
+	SDL_FreeSurface(bmp);
+
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
+
 	SDL_Delay(3000);
+
+	SDL_DestroyTexture(texture);
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
 
 	SDL_Quit();
 
